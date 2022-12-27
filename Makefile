@@ -1,5 +1,5 @@
 PKG_NAME := jpegoptim
-URL = https://www.kokkonen.net/tjko/src/jpegoptim-1.4.6.tar.gz
+URL = https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common

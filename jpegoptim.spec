@@ -5,14 +5,14 @@
 # Source0 file verified with key 0x9D08A80CED908D6A (tjko@iki.fi)
 #
 Name     : jpegoptim
-Version  : 1.4.6
-Release  : 1
-URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.4.6.tar.gz
-Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.4.6.tar.gz
-Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.4.6.tar.gz.sig
+Version  : 1.5.0
+Release  : 2
+URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz
+Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz
+Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz.sig
 Summary  : Utility for optimizing/compressing JPEG files.
 Group    : Development/Tools
-License  : GPL-2.0
+License  : GPL-3.0
 Requires: jpegoptim-bin = %{version}-%{release}
 Requires: jpegoptim-license = %{version}-%{release}
 Requires: jpegoptim-man = %{version}-%{release}
@@ -52,32 +52,31 @@ man components for the jpegoptim package.
 
 
 %prep
-%setup -q -n jpegoptim-1.4.6
-cd %{_builddir}/jpegoptim-1.4.6
+%setup -q -n jpegoptim-1.5.0
+cd %{_builddir}/jpegoptim-1.5.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1579297730
+export SOURCE_DATE_EPOCH=1672178268
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1579297730
+export SOURCE_DATE_EPOCH=1672178268
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/jpegoptim
-cp %{_builddir}/jpegoptim-1.4.6/COPYING %{buildroot}/usr/share/package-licenses/jpegoptim/4cc77b90af91e615a64ae04893fdffa7939db84c
-cp %{_builddir}/jpegoptim-1.4.6/COPYRIGHT %{buildroot}/usr/share/package-licenses/jpegoptim/a685b9795a7077276ef8b982d4b21f221ddb8ac5
+cp %{_builddir}/jpegoptim-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615
 %make_install
 
 %files
@@ -89,8 +88,7 @@ cp %{_builddir}/jpegoptim-1.4.6/COPYRIGHT %{buildroot}/usr/share/package-license
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/jpegoptim/4cc77b90af91e615a64ae04893fdffa7939db84c
-/usr/share/package-licenses/jpegoptim/a685b9795a7077276ef8b982d4b21f221ddb8ac5
+/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615
 
 %files man
 %defattr(0644,root,root,0755)
