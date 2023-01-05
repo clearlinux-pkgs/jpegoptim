@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x9D08A80CED908D6A (tjko@iki.fi)
 #
 Name     : jpegoptim
-Version  : 1.5.0
-Release  : 2
-URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz
-Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz
-Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.0.tar.gz.sig
+Version  : 1.5.1
+Release  : 3
+URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.1.tar.gz
+Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.1.tar.gz
+Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.1.tar.gz.sig
 Summary  : Utility for optimizing/compressing JPEG files.
 Group    : Development/Tools
 License  : GPL-3.0
@@ -19,6 +19,9 @@ Requires: jpegoptim-man = %{version}-%{release}
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-configure
 BuildRequires : libjpeg-turbo-dev
+# Suppress stripping binaries
+%define __strip /bin/true
+%define debug_package %{nil}
 
 %description
 Jpegoptim can optimize/compress jpeg files. Program support
@@ -52,31 +55,31 @@ man components for the jpegoptim package.
 
 
 %prep
-%setup -q -n jpegoptim-1.5.0
-cd %{_builddir}/jpegoptim-1.5.0
+%setup -q -n jpegoptim-1.5.1
+cd %{_builddir}/jpegoptim-1.5.1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672178268
+export SOURCE_DATE_EPOCH=1672933520
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
+export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
+export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
+export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1672178268
+export SOURCE_DATE_EPOCH=1672933520
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/jpegoptim
-cp %{_builddir}/jpegoptim-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/jpegoptim-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615 || :
 %make_install
 
 %files
