@@ -6,11 +6,11 @@
 # Source0 file verified with key 0x9D08A80CED908D6A (tjko@iki.fi)
 #
 Name     : jpegoptim
-Version  : 1.5.3
-Release  : 4
-URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.3.tar.gz
-Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.3.tar.gz
-Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.3.tar.gz.sig
+Version  : 1.5.4
+Release  : 5
+URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz
+Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz
+Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz.sig
 Summary  : Utility for optimizing/compressing JPEG files.
 Group    : Development/Tools
 License  : GPL-3.0
@@ -55,38 +55,56 @@ man components for the jpegoptim package.
 
 
 %prep
-%setup -q -n jpegoptim-1.5.3
-cd %{_builddir}/jpegoptim-1.5.3
+%setup -q -n jpegoptim-1.5.4
+cd %{_builddir}/jpegoptim-1.5.4
+pushd ..
+cp -a jpegoptim-1.5.4 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680035838
+export SOURCE_DATE_EPOCH=1685399096
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
+export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 %configure --disable-static
 make  %{?_smp_mflags}
 
+unset PKG_CONFIG_PATH
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
+%configure --disable-static
+make  %{?_smp_mflags}
+popd
 %install
-export SOURCE_DATE_EPOCH=1680035838
+export SOURCE_DATE_EPOCH=1685399096
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/jpegoptim
 cp %{_builddir}/jpegoptim-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615 || :
+pushd ../buildavx2/
+%make_install_v3
+popd
 %make_install
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
 
 %files bin
 %defattr(-,root,root,-)
+/V3/usr/bin/jpegoptim
 /usr/bin/jpegoptim
 
 %files license
