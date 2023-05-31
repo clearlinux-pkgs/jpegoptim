@@ -7,7 +7,7 @@
 #
 Name     : jpegoptim
 Version  : 1.5.4
-Release  : 5
+Release  : 6
 URL      : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz
 Source0  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz
 Source1  : https://www.kokkonen.net/tjko/src/jpegoptim-1.5.4.tar.gz.sig
@@ -66,7 +66,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1685399096
+export SOURCE_DATE_EPOCH=1685558570
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -89,7 +89,7 @@ export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 make  %{?_smp_mflags}
 popd
 %install
-export SOURCE_DATE_EPOCH=1685399096
+export SOURCE_DATE_EPOCH=1685558570
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/jpegoptim
 cp %{_builddir}/jpegoptim-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/jpegoptim/31a3d460bb3c7d98845187c716a30db81c44b615 || :
